@@ -19,11 +19,26 @@ public class BestProductMonthReducer extends Reducer<Text, DoubleWritable, Text,
 
 	@Override
 	public void reduce(Text key, Iterable<DoubleWritable> values, Context context) throws IOException, InterruptedException{
-
+		double avg = 0;
+		double count = 0;
+		for (DoubleWritable value : values){
+			avg+=value.get();
+			count++;
+		}
+		add_product2scores(key.toString().split("\\|")[0], key.toString().split("\\|")[1] + "|" + (avg/count));
 	}
 
 	@Override
 	public void cleanup(Context context) throws IOException, InterruptedException{
+		for (String date : date2idProduct_value.keySet()) {
+			best5products = new LinkedList<>();
+			for (String idProduct_avg : date2idProduct_value.get(date)) {
+				Product p = new Product(idProduct_avg.split("\\|")[0]);
+				p.setAverage(Double.parseDouble(idProduct_avg.split("\\|")[1]));
+				addValue(p);
+			}
+			context.write(new Text(date), new Text(getIdProducsAvg(best5products)));
+		}
 	}
 
 	private String getIdProducsAvg(List<Product> products){
