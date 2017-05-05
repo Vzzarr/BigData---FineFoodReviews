@@ -1,4 +1,4 @@
-package mapreduce.userfavouriteproducts;
+package mapreduce.userrelateds;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -7,15 +7,15 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class UserFavouriteProducts {
+public class UserRelateds {
 	public static void main(String[] args) throws Exception {
 
-		Job job = new Job(new Configuration(), "UserFavouriteProducts");
+		Job job = new Job(new Configuration(), "UserRelateds");
 
-		job.setJarByClass(UserFavouriteProducts.class);
+		job.setJarByClass(UserRelateds.class);
 		
-		job.setMapperClass(UserFavouriteProductsMapper.class);
-		job.setReducerClass(UserFavouriteProductsReducer.class);
+		job.setMapperClass(UserRelatedsMapper.class);
+		job.setReducerClass(UserRelatedsReducer.class);
 
 		
 		FileInputFormat.addInputPath(job, new Path(args[0]));
