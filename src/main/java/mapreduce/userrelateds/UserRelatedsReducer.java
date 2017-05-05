@@ -51,15 +51,20 @@ public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 		//in caso positivo non la aggiungo nella mappa
 		String firstUser = usersCouple.split("\\|")[0];
 		String secondUser = usersCouple.split("\\|")[1];
+		String omologo = secondUser+"|"+firstUser;
 		if(firstUser.compareTo(secondUser)!=0){
-			String omologo = secondUser+"|"+firstUser;
-			if(!mapCoupleUsers2productsIdList.containsKey(usersCouple)){
+			if(!mapCoupleUsers2productsIdList.containsKey(omologo)&&!mapCoupleUsers2productsIdList.containsKey(usersCouple)){
 				List<String> scores = new LinkedList<>();
 				scores.add(products);
 				mapCoupleUsers2productsIdList.put(usersCouple, scores);
+			}else if(mapCoupleUsers2productsIdList.containsKey(usersCouple)){
+				if(!mapCoupleUsers2productsIdList.get(usersCouple).contains(products))
+					mapCoupleUsers2productsIdList.get(usersCouple).add(products);
 			}
-			else
-				mapCoupleUsers2productsIdList.get(usersCouple).add(products);
-		}	
+			else{
+				if(!mapCoupleUsers2productsIdList.get(omologo).contains(products))
+					mapCoupleUsers2productsIdList.get(omologo).add(products);
+			}
+		}
 	}
 }
