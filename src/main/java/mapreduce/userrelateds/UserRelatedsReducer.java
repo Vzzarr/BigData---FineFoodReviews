@@ -15,33 +15,22 @@ public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
-		Map<String, String> mapIduser_score = new TreeMap<>();
+		Map<String, String> mapIduserKey_id = new TreeMap<>();
 		for (Text value : values){
-			if(Integer.parseInt(value.toString().split("\\|")[1])>=4){
+			int control = Integer.parseInt(value.toString().split("\\|")[1]); 
+			if(control>=4){
 				String idUserKey = value.toString().split("\\|")[0];
 				String idUserId = value.toString().split("\\|")[0];
-				mapIduser_score.put(idUserKey, idUserId);
+				mapIduserKey_id.put(idUserKey, idUserId);
 			}
 		}
 
-		for (String user1Id : mapIduser_score.keySet()) {
-			for(String user2Id : mapIduser_score.keySet()){
+		for (String user1Id : mapIduserKey_id.keySet()) {
+			for(String user2Id : mapIduserKey_id.keySet()){
 				String coupleUsers = user1Id+"|"+user2Id;
 				add_productCoupleUsers(coupleUsers, key.toString());
 			}
 		}
-	}
-
-	private void add_productCoupleUsers(String usersCouple, String products){
-		//Controllo per vedere se il suo omologo è già presente nella lista
-		//in caso positivo non la aggiungo nella mappa
-		if(!mapCoupleUsers2productsIdList.containsKey(usersCouple.split("\\|")[1]+"|"+usersCouple.split("\\|")[0])){
-			List<String> scores = new LinkedList<>();
-			scores.add(products);
-			mapCoupleUsers2productsIdList.put(usersCouple, scores);
-		}
-		else
-			mapCoupleUsers2productsIdList.get(usersCouple).add(products);
 	}
 
 	@Override
@@ -57,4 +46,20 @@ public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 		}
 	}
 
+	private void add_productCoupleUsers(String usersCouple, String products){
+		//Controllo per vedere se il suo omologo è già presente nella lista
+		//in caso positivo non la aggiungo nella mappa
+		String firstUser = usersCouple.split("\\|")[0];
+		String secondUser = usersCouple.split("\\|")[1];
+		if(firstUser.compareTo(secondUser)!=0){
+			String omologo = secondUser+"|"+firstUser;
+			if(!mapCoupleUsers2productsIdList.containsKey(usersCouple)){
+				List<String> scores = new LinkedList<>();
+				scores.add(products);
+				mapCoupleUsers2productsIdList.put(usersCouple, scores);
+			}
+			else
+				mapCoupleUsers2productsIdList.get(usersCouple).add(products);
+		}	
+	}
 }

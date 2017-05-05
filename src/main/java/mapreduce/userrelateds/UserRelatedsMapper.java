@@ -13,7 +13,7 @@ public class UserRelatedsMapper extends Mapper<LongWritable, Text, Text, Text>{
 
 		String productId = line[1];
 		String userId = line[2];
-		double score = Double.parseDouble(line[6]);
+		String score = line[6];
 
 		context.write(new Text(productId), new Text(userId + "|" + score));
 	}
