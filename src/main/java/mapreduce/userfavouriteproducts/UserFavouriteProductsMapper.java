@@ -1,4 +1,4 @@
-package mapreduce_userfavouriteproducts;
+package mapreduce.userfavouriteproducts;
 
 import java.io.IOException;
 

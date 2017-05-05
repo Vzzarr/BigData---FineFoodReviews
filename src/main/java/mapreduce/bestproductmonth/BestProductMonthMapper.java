@@ -1,14 +1,15 @@
-package mapreduce_bestproductmonth;
+package mapreduce.bestproductmonth;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 
-public class BestProductMonthMapper extends Mapper<LongWritable, Text, Text, Text>{
+public class BestProductMonthMapper extends Mapper<LongWritable, Text, Text, DoubleWritable>{
 
 	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
 		String[] line = value.toString().split("\t");
@@ -20,6 +21,6 @@ public class BestProductMonthMapper extends Mapper<LongWritable, Text, Text, Tex
 		String productId = line[1];
 		int score = Integer.parseInt(line[6]);
 
-		context.write(new Text(formattedDate), new Text(productId + "|" + score));
+		context.write(new Text(formattedDate + "|" + productId), new DoubleWritable(score));
 	}
 }

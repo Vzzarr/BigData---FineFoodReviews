@@ -1,4 +1,4 @@
-package mapreduce_bestproductmonth;
+package mapreduce.userfavouriteproducts;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -7,16 +7,17 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class BestProductMonth {
+public class UserFavouriteProducts {
+
 
 	public static void main(String[] args) throws Exception {
 
-		Job job = new Job(new Configuration(), "BestProductMonth");
+		Job job = new Job(new Configuration(), "UserFavouriteProducts");
 
-		job.setJarByClass(BestProductMonth.class);
+		job.setJarByClass(UserFavouriteProducts.class);
 		
-		job.setMapperClass(BestProductMonthMapper.class);
-		job.setReducerClass(BestProductMonthReducer.class);
+		job.setMapperClass(UserFavouriteProductsMapper.class);
+		job.setReducerClass(UserFavouriteProductsReducer.class);
 
 		
 		FileInputFormat.addInputPath(job, new Path(args[0]));
@@ -26,8 +27,6 @@ public class BestProductMonth {
 		job.setMapOutputValueClass(Text.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
-		
-		job.setNumReduceTasks(1);
 
 		job.waitForCompletion(true);
 	}
