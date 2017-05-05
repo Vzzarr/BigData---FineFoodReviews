@@ -1,86 +1,60 @@
 package mapreduce.userrelateds;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.apache.hadoop.io.DoubleWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 
-import utils.Product;
-
 public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 
-	private List<Product> best5products = new LinkedList<>();
-	private Map<String, List<Product>> mapCoupleUsers = new TreeMap<>();
+	private Map<String, List<String>> mapCoupleUsers2productsIdList = new TreeMap<>();
 
 	@Override
 	public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException{
-		//		Collections.sort(values);
-		List<String> users = new LinkedList<>();
+		Map<String, String> mapIduser_score = new TreeMap<>();
 		for (Text value : values){
-			if(Integer.parseInt(value.toString().split("\\|")[1])>=4)
-				users.add(value.toString());
+			if(Integer.parseInt(value.toString().split("\\|")[1])>=4){
+				String idUserKey = value.toString().split("\\|")[0];
+				String idUserId = value.toString().split("\\|")[0];
+				mapIduser_score.put(idUserKey, idUserId);
+			}
 		}
 
-		Collections.sort(users);
+		for (String user1Id : mapIduser_score.keySet()) {
+			for(String user2Id : mapIduser_score.keySet()){
+				String coupleUsers = user1Id+"|"+user2Id;
+				add_productCoupleUsers(coupleUsers, key.toString());
+			}
+		}
+	}
 
-
-		Map<String, Double> 
-
+	private void add_productCoupleUsers(String usersCouple, String products){
+		//Controllo per vedere se il suo omologo è già presente nella lista
+		//in caso positivo non la aggiungo nella mappa
+		if(!mapCoupleUsers2productsIdList.containsKey(usersCouple.split("\\|")[1]+"|"+usersCouple.split("\\|")[0])){
+			List<String> scores = new LinkedList<>();
+			scores.add(products);
+			mapCoupleUsers2productsIdList.put(usersCouple, scores);
+		}
+		else
+			mapCoupleUsers2productsIdList.get(usersCouple).add(products);
 	}
 
 	@Override
 	public void cleanup(Context context) throws IOException, InterruptedException{
-		for (String date : date2idProduct_value.keySet()) {
-			best5products = new LinkedList<>();
-			for (String idProduct_avg : date2idProduct_value.get(date)) {
-				Product p = new Product(idProduct_avg.split("\\|")[0]);
-				p.setAverage(Double.parseDouble(idProduct_avg.split("\\|")[1]));
-				addValue(p);
+		for (String coupleUsers : mapCoupleUsers2productsIdList.keySet()) {
+			if(mapCoupleUsers2productsIdList.get(coupleUsers).size()>=3){
+				String products = "";
+				for (String idProduct : mapCoupleUsers2productsIdList.get(coupleUsers)) {
+					products+= idProduct + " ";
+				}
+				context.write(new Text(coupleUsers), new Text(products));
 			}
-			context.write(new Text(date), new Text(getIdProducsAvg(best5products)));
 		}
 	}
 
-	private String getIdProducsAvg(List<Product> products){
-		String values = "";
-		for (Product product : products) {
-			values += product.getIdProduct() + "|" + product.getAverage() + " ";
-		}
-		return values;
-	}
-
-	private void addValue(Product product) {
-		if (best5products.size() == 0)
-			best5products.add(product);
-		else if (best5products.get(0).getAverage() > product.getAverage())
-			best5products.add(0, product);
-		else if (best5products.get(best5products.size() - 1).getAverage() < product.getAverage())
-			best5products.add(best5products.size(), product);
-		else {
-			int i = 0;
-			while (best5products.get(i).getAverage() < product.getAverage()) {
-				i++;
-			}
-			best5products.add(i, product);
-		}
-
-		if(best5products.size() > 5)
-			best5products.remove(0);
-	}
-
-	private void add_productCoupleUsers(String product, String score){
-		if(!date2idProduct_value.containsKey(product)){
-			List<String> scores = new LinkedList<>();
-			scores.add(score);
-			date2idProduct_value.put(product, scores);
-		}
-		else
-			date2idProduct_value.get(product).add(score);
-	}
 }
