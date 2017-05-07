@@ -76,9 +76,24 @@ public class UserRelateds implements Serializable {
 		.filter(new Function<Tuple2<String,String>, Boolean>() {
 			@Override
 			public Boolean call(Tuple2<String, String> v1) throws Exception {
-				// TODO Auto-generated method stub
 				return v1!=null;
 			}
+		})
+		.groupByKey()
+		.filter(new Function<Tuple2<String, Iterable<String>>, Boolean>(){
+
+			@Override
+			public Boolean call(Tuple2<String, Iterable<String>> v) throws Exception {
+				// TODO Auto-generated method stub
+				Iterator<String> it = v._2.iterator();
+				int numberProducts = 0;
+				while(it.hasNext()){
+					it.next();
+					numberProducts++;
+				}
+				return numberProducts>2;
+			}
+
 		})
 		.saveAsTextFile(outputFolderPath);
 		//		joined.mapToPair(row->{
