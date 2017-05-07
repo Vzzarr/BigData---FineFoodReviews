@@ -2,8 +2,6 @@ package spark.userrelateds;
 
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
@@ -12,7 +10,6 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.api.java.function.Function;
 
 import scala.Tuple2;
-import utils.Product;
 
 public class UserRelateds implements Serializable {
 
@@ -81,7 +78,6 @@ public class UserRelateds implements Serializable {
 		})
 		.groupByKey()
 		.filter(new Function<Tuple2<String, Iterable<String>>, Boolean>(){
-
 			@Override
 			public Boolean call(Tuple2<String, Iterable<String>> v) throws Exception {
 				// TODO Auto-generated method stub
@@ -95,9 +91,10 @@ public class UserRelateds implements Serializable {
 			}
 
 		})
+		.sortByKey()
 		.saveAsTextFile(outputFolderPath);
-		//		joined.mapToPair(row->{
-		//			return new Tuple2<>(row._2, row._1);
-		//		});
+
+		sc.close();
+		sc.stop();
 	}
 }
