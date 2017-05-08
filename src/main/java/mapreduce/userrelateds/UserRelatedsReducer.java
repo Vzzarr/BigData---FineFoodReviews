@@ -47,7 +47,7 @@ public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 	}
 
 	private void add_productCoupleUsers(String usersCouple, String products){
-		//Controllo per vedere se il suo omologo è già presente nella lista
+		//Controllo per vedere se il suo omologo inverso è già presente nella lista
 		//in caso positivo non la aggiungo nella mappa
 		String firstUser = usersCouple.split("\\|")[0];
 		String secondUser = usersCouple.split("\\|")[1];
