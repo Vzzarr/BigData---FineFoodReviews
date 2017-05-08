@@ -25,9 +25,10 @@ public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 			}
 		}
 
-		for (String user1Id : mapIduserKey_id.keySet()) {
-			for(String user2Id : mapIduserKey_id.keySet()){
-				String coupleUsers = user1Id+"|"+user2Id;
+		List<String> listUsers = new LinkedList<>(mapIduserKey_id.keySet());
+		for (int i = 0; i<listUsers.size(); i++) {
+			for(int j = i+1; j<listUsers.size(); j++){
+				String coupleUsers = listUsers.get(i)+"|"+listUsers.get(j);
 				add_productCoupleUsers(coupleUsers, key.toString());
 			}
 		}
@@ -47,24 +48,11 @@ public class UserRelatedsReducer extends Reducer<Text, Text, Text, Text>{
 	}
 
 	private void add_productCoupleUsers(String usersCouple, String products){
-		//Controllo per vedere se il suo omologo inverso è già presente nella lista
-		//in caso positivo non la aggiungo nella mappa
-		String firstUser = usersCouple.split("\\|")[0];
-		String secondUser = usersCouple.split("\\|")[1];
-		String omologo = secondUser+"|"+firstUser;
-		if(firstUser.compareTo(secondUser)!=0){
-			if(!mapCoupleUsers2productsIdList.containsKey(omologo)&&!mapCoupleUsers2productsIdList.containsKey(usersCouple)){
-				List<String> scores = new LinkedList<>();
-				scores.add(products);
-				mapCoupleUsers2productsIdList.put(usersCouple, scores);
-			}else if(mapCoupleUsers2productsIdList.containsKey(usersCouple)){
-				if(!mapCoupleUsers2productsIdList.get(usersCouple).contains(products))
-					mapCoupleUsers2productsIdList.get(usersCouple).add(products);
-			}
-			else{
-				if(!mapCoupleUsers2productsIdList.get(omologo).contains(products))
-					mapCoupleUsers2productsIdList.get(omologo).add(products);
-			}
-		}
+		if(!mapCoupleUsers2productsIdList.containsKey(usersCouple)){
+			List<String> scores = new LinkedList<>();
+			scores.add(products);
+			mapCoupleUsers2productsIdList.put(usersCouple, scores);
+		}else 
+			mapCoupleUsers2productsIdList.get(usersCouple).add(products);
 	}
 }
