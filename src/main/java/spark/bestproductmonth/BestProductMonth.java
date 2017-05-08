@@ -29,6 +29,7 @@ public class BestProductMonth implements Serializable {
 	}
 
 	public static void main(String[] args) {
+		double startTime = System.currentTimeMillis();
 
 		if(args.length < 2) {
 			System.err.println("Usage: <input-file> <output-folder>");
@@ -36,6 +37,10 @@ public class BestProductMonth implements Serializable {
 
 		BestProductMonth bpm = new BestProductMonth(args[0], args[1]);
 		bpm.run();
+
+		double stopTime = System.currentTimeMillis();
+		double elapsedTime = (stopTime - startTime) / 1000;
+		System.out.println("TEMPO DI ESECUZIONE:\t" + elapsedTime + "s");
 	}
 
 	@SuppressWarnings({ "resource", "rawtypes", "unchecked" })

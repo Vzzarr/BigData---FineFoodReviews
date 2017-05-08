@@ -30,6 +30,7 @@ public class UserRelateds implements Serializable {
 	}
 
 	public static void main(String[] args) {
+		double startTime = System.currentTimeMillis();
 
 		if(args.length < 2) {
 			System.err.println("Usage: <input-file> <output-folder>");
@@ -37,6 +38,10 @@ public class UserRelateds implements Serializable {
 
 		UserRelateds bpm = new UserRelateds(args[0], args[1]);
 		bpm.run();
+
+		double stopTime = System.currentTimeMillis();
+		double elapsedTime = (stopTime - startTime) / 1000;
+		System.out.println("TEMPO DI ESECUZIONE:\t" + elapsedTime + "s");
 	}
 
 	@SuppressWarnings({ "resource"})
@@ -80,7 +85,7 @@ public class UserRelateds implements Serializable {
 		sc.close();
 		sc.stop();
 	}
-	
+
 	private boolean checkValue(String key){
 		boolean valuesIsUp2 = false;
 		if(mapUsersRelatesdSame2productsIdList.getValue().get(key)!=null)
@@ -88,7 +93,7 @@ public class UserRelateds implements Serializable {
 				valuesIsUp2 = true;
 		return mapUsersRelatesdSame2productsIdList.getValue().containsKey(key)&&valuesIsUp2;
 	}
-	
+
 	private void add_UsersRelatesdSame2productsIdList(String usersCouple, String products){
 		//Controllo per vedere se il suo omologo inverso è già presente nella lista
 		//in caso positivo non la aggiungo nella mappa
@@ -100,7 +105,7 @@ public class UserRelateds implements Serializable {
 				List<String> scores = new LinkedList<>();
 				scores.add(products);
 				mapUsersRelatesdSame2productsIdList.getValue().put(usersCouple, scores);
-//				System.out.println(mapCoupleUsers2productsIdList.get(usersCouple).get(0));
+				//				System.out.println(mapCoupleUsers2productsIdList.get(usersCouple).get(0));
 			}else if(mapUsersRelatesdSame2productsIdList.getValue().containsKey(usersCouple)){
 				if(!mapUsersRelatesdSame2productsIdList.getValue().get(usersCouple).contains(products))
 					mapUsersRelatesdSame2productsIdList.getValue().get(usersCouple).add(products);
