@@ -11,6 +11,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 public class BestProductMonth {
 
 	public static void main(String[] args) throws Exception {
+		double startTime = System.currentTimeMillis();
 
 		Job job = new Job(new Configuration(), "BestProductMonth");
 
@@ -31,5 +32,9 @@ public class BestProductMonth {
 		job.setNumReduceTasks(1);
 
 		job.waitForCompletion(true);
+		
+		double stopTime = System.currentTimeMillis();
+		double elapsedTime = (stopTime - startTime) / 1000;
+		System.out.println("TEMPO DI ESECUZIONE:\t" + elapsedTime + "s");
 	}
 }

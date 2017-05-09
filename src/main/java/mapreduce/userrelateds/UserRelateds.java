@@ -9,6 +9,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class UserRelateds {
 	public static void main(String[] args) throws Exception {
+		double startTime = System.currentTimeMillis();
 
 		Job job = new Job(new Configuration(), "UserRelateds");
 
@@ -27,5 +28,9 @@ public class UserRelateds {
 		job.setOutputValueClass(Text.class);
 
 		job.waitForCompletion(true);
+		
+		double stopTime = System.currentTimeMillis();
+		double elapsedTime = (stopTime - startTime) / 1000;
+		System.out.println("TEMPO DI ESECUZIONE:\t" + elapsedTime + "s");
 	}
 }

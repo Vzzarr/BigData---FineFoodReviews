@@ -1,16 +1,13 @@
 package spark.userrelateds;
 
 import java.io.Serializable;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.broadcast.Broadcast;
 
 import scala.Tuple2;
 
@@ -22,7 +19,6 @@ public class UserRelateds implements Serializable {
 	private static final int ID_USER = 2;
 	private static final int ID_PRODUCT = 1;
 	private static final int SCORE = 6;
-	private Broadcast<Map<String, List<String>>> mapUsersRelatesdSame2productsIdList;
 
 	public UserRelateds(String inFile, String outPath) {
 		this.inputFilePath = inFile;
@@ -48,73 +44,26 @@ public class UserRelateds implements Serializable {
 	private void run() {
 		SparkConf conf = new SparkConf().setAppName(this.getClass().getName());
 		JavaSparkContext sc = new JavaSparkContext(conf);
-		mapUsersRelatesdSame2productsIdList = sc.broadcast(new TreeMap<>());
 		JavaRDD<String> userRelateds = sc.textFile(inputFilePath);
 
-		JavaPairRDD<String, String> idProduct2user =  userRelateds.mapToPair(row->{
-			String[] tsvValues = row.split("\t");
-			Integer scoreUp3 = new Integer(tsvValues[SCORE]);
-			if(scoreUp3>3){
-				return new Tuple2<>(tsvValues[ID_PRODUCT],tsvValues[ID_USER]);
-			}else
-				return null;
-			//Serve per eliminare i valori nulli
-		}).filter(filter -> filter != null);
+		JavaPairRDD<String, String> idProduct2user =  userRelateds
+				.filter(filter -> Integer.parseInt(filter.split("\t")[SCORE]) > 3)
+				.mapToPair(row -> {
+					String[] tsvValues = row.split("\t");
+					return new Tuple2<>(tsvValues[ID_PRODUCT], tsvValues[ID_USER]);
+				});
 
-
-		/*
-		 * When called on datasets of type (K, V) and (K, W), returns a dataset of (K, (V, W))
-		 * pairs with all pairs of elements for each key. Outer joins are supported through leftOuterJoin, 
-		 * rightOuterJoin, and fullOuterJoin.*/
-		idProduct2user.join(idProduct2user)
-		.mapToPair(row->{
-			String user1 = row._2._1;
-			String user2 = row._2._2;
-			if(!user1.equals(user2)){
-				add_UsersRelatesdSame2productsIdList(row._2._1+"|"+row._2._2,row._1);
-				return new Tuple2<>(row._2._1+"|"+row._2._2,row._1);
-			}else
-				return null;
-		})
-		.filter(filter -> filter != null)
-		.groupByKey()
-		.sortByKey()
-		.filter(filter -> checkValue(filter._1))
-		.saveAsTextFile(outputFolderPath);
+		//key v1, key v2 -> key(v1, v2)
+		idProduct2user.join(idProduct2user).filter(filter -> filter._2._1.compareTo(filter._2._2) < 0)
+		.mapToPair(row -> new Tuple2<>(row._2._1 + "|" + row._2._2, row._1)).groupByKey()
+		.mapToPair(coupleUser_products -> {
+			Set<String> products = new HashSet<>();
+			for (String iterable_element : coupleUser_products._2)
+				products.add(iterable_element);
+			return new Tuple2<>(coupleUser_products._1, products);
+		}).filter(filter -> filter._2.size() > 2).sortByKey().saveAsTextFile(outputFolderPath);
 
 		sc.close();
 		sc.stop();
 	}
-
-	private boolean checkValue(String key){
-		boolean valuesIsUp2 = false;
-		if(mapUsersRelatesdSame2productsIdList.getValue().get(key)!=null)
-			if(mapUsersRelatesdSame2productsIdList.getValue().get(key).size()>2)
-				valuesIsUp2 = true;
-		return mapUsersRelatesdSame2productsIdList.getValue().containsKey(key)&&valuesIsUp2;
-	}
-
-	private void add_UsersRelatesdSame2productsIdList(String usersCouple, String products){
-		//Controllo per vedere se il suo omologo inverso è già presente nella lista
-		//in caso positivo non la aggiungo nella mappa
-		String firstUser = usersCouple.split("\\|")[0];
-		String secondUser = usersCouple.split("\\|")[1];
-		String omologo = secondUser+"|"+firstUser;
-		if(firstUser.compareTo(secondUser)!=0){
-			if(!mapUsersRelatesdSame2productsIdList.getValue().containsKey(omologo)&&!mapUsersRelatesdSame2productsIdList.getValue().containsKey(usersCouple)){
-				List<String> scores = new LinkedList<>();
-				scores.add(products);
-				mapUsersRelatesdSame2productsIdList.getValue().put(usersCouple, scores);
-				//				System.out.println(mapCoupleUsers2productsIdList.get(usersCouple).get(0));
-			}else if(mapUsersRelatesdSame2productsIdList.getValue().containsKey(usersCouple)){
-				if(!mapUsersRelatesdSame2productsIdList.getValue().get(usersCouple).contains(products))
-					mapUsersRelatesdSame2productsIdList.getValue().get(usersCouple).add(products);
-			}
-			else{
-				if(!mapUsersRelatesdSame2productsIdList.getValue().get(omologo).contains(products))
-					mapUsersRelatesdSame2productsIdList.getValue().get(omologo).add(products);
-			}
-		}
-	}
-
 }
