@@ -48,13 +48,10 @@ public class UserRelateds implements Serializable {
 
 		JavaPairRDD<String, String> idProduct2user =  userRelateds
 				.filter(filter -> Integer.parseInt(filter.split("\t")[SCORE]) > 3)
-				.mapToPair(row -> {
-					String[] tsvValues = row.split("\t");
-					return new Tuple2<>(tsvValues[ID_PRODUCT], tsvValues[ID_USER]);
-				});
-
+				.mapToPair(row -> new Tuple2<>(row.split("\t")[ID_PRODUCT], row.split("\t")[ID_USER]));
 		//key v1, key v2 -> key(v1, v2)
-		idProduct2user.join(idProduct2user).filter(filter -> filter._2._1.compareTo(filter._2._2) < 0)
+		idProduct2user.join(idProduct2user)
+		.filter(product2coupleUser -> product2coupleUser._2._1.compareTo(product2coupleUser._2._2) < 0)
 		.mapToPair(row -> new Tuple2<>(row._2._1 + "|" + row._2._2, row._1)).groupByKey()
 		.mapToPair(coupleUser_products -> {
 			Set<String> products = new HashSet<>();

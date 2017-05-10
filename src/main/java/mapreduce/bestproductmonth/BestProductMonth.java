@@ -29,7 +29,7 @@ public class BestProductMonth {
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(Text.class);
 		
-		job.setNumReduceTasks(1);
+//		job.setNumReduceTasks(1);
 
 		job.waitForCompletion(true);
 		
