@@ -1,0 +1,51 @@
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/usr/local/hive-2.1.1-bin/lib/log4j-slf4j-impl-2.4.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/usr/local/hadoop-2.8.0/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+
+Logging initialized using configuration in jar:file:/usr/local/hive-2.1.1-bin/lib/hive-common-2.1.1.jar!/hive-log4j2.properties Async: true
+OK
+Time taken: 1.048 seconds
+Loading data to table default.foodreviews
+OK
+Time taken: 13.714 seconds
+OK
+Time taken: 1.825 seconds
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = nicholas_20170515183553_d92dee42-15db-4576-9529-886a43381f51
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 2
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Job running in-process (local Hadoop)
+2017-05-15 18:36:00,339 Stage-1 map = 0%,  reduce = 0%
+2017-05-15 18:36:10,357 Stage-1 map = 50%,  reduce = 0%
+2017-05-15 18:36:11,363 Stage-1 map = 100%,  reduce = 0%
+2017-05-15 18:36:12,375 Stage-1 map = 100%,  reduce = 50%
+2017-05-15 18:36:13,386 Stage-1 map = 100%,  reduce = 100%
+Ended Job = job_local1132797066_0001
+Launching Job 2 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Job running in-process (local Hadoop)
+2017-05-15 18:36:15,649 Stage-2 map = 0%,  reduce = 0%
+2017-05-15 18:36:16,652 Stage-2 map = 100%,  reduce = 0%
+2017-05-15 18:36:18,659 Stage-2 map = 100%,  reduce = 100%
+Ended Job = job_local986324015_0002
+MapReduce Jobs Launched: 
+Stage-Stage-1:  HDFS Read: 1165655826 HDFS Write: 1196250136 SUCCESS
+Stage-Stage-2:  HDFS Read: 598141452 HDFS Write: 598125068 SUCCESS
+Total MapReduce CPU Time Spent: 0 msec
+OK
+

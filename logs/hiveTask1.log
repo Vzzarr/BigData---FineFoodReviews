@@ -1,0 +1,67 @@
+MacBook-Pro-di-Jhonattan:bin bigdata$ ./hive -f ~/Desktop/hive1.hql > ~/Desktop/ciao.txt  
+readlink: illegal option -- f
+usage: readlink [-n] [file ...]
+SLF4J: Class path contains multiple SLF4J bindings.
+SLF4J: Found binding in [jar:file:/Users/bigdata/Documents/hive/lib/log4j-slf4j-impl-2.4.1.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: Found binding in [jar:file:/Users/bigdata/Documents/hadoop/share/hadoop/common/lib/slf4j-log4j12-1.7.10.jar!/org/slf4j/impl/StaticLoggerBinder.class]
+SLF4J: See http://www.slf4j.org/codes.html#multiple_bindings for an explanation.
+SLF4J: Actual binding is of type [org.apache.logging.slf4j.Log4jLoggerFactory]
+
+Logging initialized using configuration in jar:file:/Users/bigdata/Documents/hive/lib/hive-common-2.1.1.jar!/hive-log4j2.properties Async: true
+Tue May 16 14:37:46 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:46 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:46 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:46 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:48 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:48 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:48 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+Tue May 16 14:37:48 CEST 2017 WARN: Establishing SSL connection without server's identity verification is not recommended. According to MySQL 5.5.45+, 5.6.26+ and 5.7.6+ requirements SSL connection must be established by default if explicit option isn't set. For compliance with existing applications not using SSL the verifyServerCertificate property is set to 'false'. You need either to explicitly disable SSL by setting useSSL=false, or set useSSL=true and provide truststore for server certificate verification.
+OK
+Time taken: 2.047 seconds
+Loading data to table default.foodreviews
+OK
+Time taken: 37.865 seconds
+OK
+Time taken: 6.064 seconds
+WARNING: Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.
+Query ID = bigdata_20170516143837_1ffb4813-a9f5-4578-83e6-5a49076ebd77
+Total jobs = 2
+Launching Job 1 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 3
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Job running in-process (local Hadoop)
+2017-05-16 14:38:48,980 Stage-1 map = 0%,  reduce = 0%
+2017-05-16 14:38:59,098 Stage-1 map = 100%,  reduce = 0%
+2017-05-16 14:39:09,222 Stage-1 map = 33%,  reduce = 0%
+2017-05-16 14:39:11,235 Stage-1 map = 100%,  reduce = 0%
+2017-05-16 14:39:19,277 Stage-1 map = 67%,  reduce = 0%
+2017-05-16 14:39:23,300 Stage-1 map = 100%,  reduce = 0%
+2017-05-16 14:39:28,325 Stage-1 map = 100%,  reduce = 100%
+2017-05-16 14:39:29,331 Stage-1 map = 100%,  reduce = 33%
+2017-05-16 14:39:31,340 Stage-1 map = 100%,  reduce = 67%
+2017-05-16 14:39:32,345 Stage-1 map = 100%,  reduce = 100%
+Ended Job = job_local107335594_0001
+Launching Job 2 out of 2
+Number of reduce tasks not specified. Estimated from input data size: 1
+In order to change the average load for a reducer (in bytes):
+  set hive.exec.reducers.bytes.per.reducer=<number>
+In order to limit the maximum number of reducers:
+  set hive.exec.reducers.max=<number>
+In order to set a constant number of reducers:
+  set mapreduce.job.reduces=<number>
+Job running in-process (local Hadoop)
+2017-05-16 14:39:34,662 Stage-2 map = 0%,  reduce = 0%
+2017-05-16 14:39:35,665 Stage-2 map = 100%,  reduce = 0%
+2017-05-16 14:39:36,671 Stage-2 map = 100%,  reduce = 100%
+Ended Job = job_local1941647348_0002
+MapReduce Jobs Launched: 
+Stage-Stage-1:  HDFS Read: 3752389216 HDFS Write: 4420464528 SUCCESS
+Stage-Stage-2:  HDFS Read: 1473529136 HDFS Write: 1473488176 SUCCESS
+Total MapReduce CPU Time Spent: 0 msec
+OK
+Time taken: 59.603 seconds, Fetched: 641 row(s)
